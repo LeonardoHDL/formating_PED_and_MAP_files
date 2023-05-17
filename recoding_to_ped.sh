@@ -5,7 +5,7 @@
 #which contain genotypes in the form of 0, 1, 2
 #the ped file requires genotypes in the form of 0 0, 0 1, 1 1
 #it also deletes the header line of the lof matrix file
-
+extrafiles="/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230508_burden_analysis/fid_and_iid.txt"
 while getopts i:x:g:m:a:h:n:r:o:p flag
 do
     case "${flag}" in
@@ -19,7 +19,7 @@ do
     esac
 done
 
-path_to_python_script="/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230508_burden_analysis/m1_1_trial/merging_fam_and_genotype_info_to_create_ped_file.py"
+path_to_python_script="/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230508_burden_analysis/merging_fam_and_genotype_info_to_create_ped_file.py"
 
 awk '{ for (i = 2; i <= NF; i++) { if ($i == 0) $i = "0 0"; else if ($i == 1) $i = "0 1"; else if ($i == 2) $i = "1 1"; } print }' $input_file > $outfile
 tmpfile=$(mktemp temporary_file.XXXXXXXXXX)
@@ -28,4 +28,5 @@ tail -n +2 $tmpfile > $outfile
 rm $tmpfile
 
 module load python38/3.8.3
-python3 merging_fam_and_genotype_info_to_create_ped_file.py fid_and_iid.txt $outfile
+python3 $path_to_python_script $extrafiles $outfile whyyyy.ped
+module unload python38/3.8.3

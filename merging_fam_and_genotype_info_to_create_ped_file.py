@@ -15,7 +15,8 @@ geno_and_fam_new_order = geno_and_fam[new_col_order]
 column_position = 6  # Index of the column to be deleted (0-based index)
 geno_and_fam_final = geno_and_fam_new_order.iloc[:, [i for i in range(len(geno_and_fam_new_order.columns)) if i != column_position]]
 ##now we will save the file
-geno_and_fam_final.to_csv(f'/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230508_burden_analysis/m1_1_trial/final_burden.ped',sep=' ',index=False,header=False)
+directory_of_output=sys.argv[3]
+geno_and_fam_final.to_csv(f'{directory_of_output}',sep=' ',index=False,header=False)
 
 
 
