@@ -3,10 +3,6 @@ import numpy as np
 import sys
 fid_iid_external=sys.argv[1]
 fid_and_iid = pd.read_table(fid_iid_external,sep=' ',names=['FID','IID'])
-fid_and_iid['fatherID']=0
-fid_and_iid['motherID']=0
-fid_and_iid['SEX']=0
-fid_and_iid['PHENO']=0
 genotype_file=sys.argv[2]
 geno_file=pd.read_table(genotype_file, sep=' ',header=None)
 colnames=geno_file.columns.tolist()
