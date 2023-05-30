@@ -57,6 +57,9 @@ print(f'semifianl_transposed_sample_gene_matrix.shape: {semifianl_transposed_sam
 merged_semifinal_w_anottation=pd.merge(semifianl_transposed_sample_gene_matrix,filetr_of_genes_anno_file,on='GeneID',how='inner')
 print(f'merged_semifinal_w_anottation.shape: {merged_semifinal_w_anottation.shape}')
 
+#so that columns of the matrix are in the same order as the gene anottation file, we will sort the columns
+merged_semifinal_w_anottation=merged_semifinal_w_anottation.sort_values(by=['Gene(ensxxx)'])
+
 #since we only did the transpose to get a column of the gene names, we will transpose the matrix again
 re_transposed_final_matrix=merged_semifinal_w_anottation.transpose()
 print(f're_transposed_final_matrix.shape: {re_transposed_final_matrix.shape}')
@@ -101,3 +104,50 @@ geno_and_fam_final = geno_and_fam_new_order.iloc[:, [i for i in range(len(geno_a
 print(f'geno_and_fam_final.shape: {geno_and_fam_final.shape}')
 output_file=sys.argv[4]
 geno_and_fam_final.to_csv(output_file,sep=' ',index=False, header=False)
+
+#now from the gene anottation file we will create the MAP file
+print('the gene anottation file will be used to create the MAP file')
+print(f'gene_anottation_file.shape: {gene_anottation_file.shape}')
+
+#first we obtain the columns that we need from the gene anottation file
+gene_anottation_file_for_MAP=gene_anottation_file[['GeneName','GeneId','CHR','MinPos','MaxPos']]
+
+#now we get the genes that are in the matrix
+genes_to_be_kept=merged_semifinal_w_anottation[['Gene(ensxxx)','GeneName_x','GeneID']]
+print(f'genes to be kept.shape: {genes_to_be_kept.shape}')
+
+#we will rename the column GeneName_x to GeneName
+genes_to_be_kept.rename(columns={'GeneName_x':'GeneName'},inplace=True)
+
+#now we proceed to merge the gene anottation file with the genes to be kept
+#so that genes that are not in the matrix are removed
+merged_gene_anottation_file_for_MAP=pd.merge(gene_anottation_file_for_MAP,genes_to_be_kept,on=['GeneName'],how='inner')
+print('merged_gene_anottation_file_for_MAP.shape: ',merged_gene_anottation_file_for_MAP.shape)
+
+
+#now add a column of 0s called CM
+merged_gene_anottation_file_for_MAP['CM']=0
+
+#now we will select the columns that we want to keep and in a specific order
+MAP_file=merged_gene_anottation_file_for_MAP[['CHR','Gene(ensxxx)','CM','MinPos','MaxPos']]
+print(f'MAP_file.shape: {MAP_file.shape}')
+
+#concatenate two columns with specific character separator
+separator = ':'
+MAP_file['Concatenated_Columns'] = [f"{a}{separator}{b}" for a, b in zip(MAP_file['MinPos'], MAP_file['MaxPos'])]
+print(f'MAP_file.shape: {MAP_file.shape}')
+
+#now we will rename the the new column as BPposition
+MAP_file.rename(columns={'Concatenated_Columns':'BPposition'},inplace=True)
+
+#at last, we will select the columns that we want to keep and in a specific order
+seminfinal_MAP_file=MAP_file[['CHR','Gene(ensxxx)','CM','BPposition']]
+print(f'seminfinal_MAP_file.shape: {seminfinal_MAP_file.shape}')
+
+#now we will sort the MAP file by the gene name, so that it is in the same order as the PED file
+sorted_final_MAP_file=seminfinal_MAP_file.sort_values(by=['Gene(ensxxx)'])
+print(f'sorted_seminfinal_MAP_file.shape: {sorted_final_MAP_file.shape}')
+
+#now we proceed to save the MAP file
+output_file_for_MAP=sys.argv[5]
+sorted_final_MAP_file.to_csv(output_file_for_MAP,sep=' ',index=False, header=False)
