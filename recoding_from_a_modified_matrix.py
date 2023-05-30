@@ -7,6 +7,8 @@
 import pandas as pd
 import numpy as np
 import sys
+import warnings
+warnings.filterwarnings("ignore")
 
 #define the gene anottation file
 gene_anottation_file_directory= sys.argv[1]
