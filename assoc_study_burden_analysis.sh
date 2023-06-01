@@ -24,7 +24,20 @@ covars_file='/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230508_bu
 
 module load plink/1.9
 plink --file $input_file --keep-allele-order --make-bed --out $tmpfile
-plink --bfile $tmpfile --logistic --pheno $pheno_file --pheno-name Keloids --covar $covars_file --covar-name PC1-PC4 --allow-no-sex --keep-allele-order --out $outfile
+plink --bfile $tmpfile --logistic --pheno $pheno_file --pheno-name Keloids --covar $covars_file --covar-name PC1-PC4 --hide-covars --allow-no-sex --keep-allele-order --out $outfile
 module unload plink/1.9
+
+
+
+#now that we have done the association analysis, we still havet to plot the results
+
+results_of_assoc_just_snps=${outfile}
+path_R_script='assoc_results_plotts.R'
+output_for_QQ=${outdirectory}M1.1_QQplot.png
+output_for_man=${outdirectory}M1.1_MAN_plot.png
+
+module load r/4.2.2
+Rscript --vanilla ${path_R_script} ${results_of_assoc_just_snps} ${output_for_QQ} ${output_for_man}
+module unload r/4.2.2
 
 rm $tmpfile
