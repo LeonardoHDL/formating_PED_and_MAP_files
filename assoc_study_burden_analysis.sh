@@ -21,10 +21,10 @@ tmpfile=$(mktemp temporary_file.XXXXXXXXXX) #this is a temporary file that will 
 outfile=${outdirectory}Gene_burden_Analysis_M1.1
 pheno_file='/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230227_PCA_results_and_extrafiles/pheno.txt'
 covars_file='/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230508_burden_analysis/covarfile_array_0.005.txt'
-
+bedfile=${outdirectory}M1.1
 module load plink/1.9
-plink --file $input_file --keep-allele-order --make-bed --out $tmpfile
-plink --bfile $tmpfile --logistic --pheno $pheno_file --pheno-name Keloids --covar $covars_file --covar-name PC1-PC4 --hide-covars --allow-no-sex --keep-allele-order --out $outfile
+plink --file $input_file --keep-allele-order --make-bed --out $bedfile
+plink --bfile $bedfile --logistic --pheno $pheno_file --pheno-name Keloids --covar $covars_file --covar-name PC1-PC4 --hide-covar --allow-no-sex --keep-allele-order --out $outfile
 module unload plink/1.9
 
 
