@@ -47,15 +47,16 @@ tmpfile4=$(mktemp temporary_file.XXXXXXXXXX3)
 #after we call python, we first insert the python script, then the gene annotation file, then the lof matrix file, 
 #then the external FAM file, then the output path to PED file and then the output path to MAP file
 
+mid_ped_file="mid_ped_file_before_recode.ped"
 
-#module load python38/3.8.3
-python3 $python_script $gene_annotation_file $tmpfile3 $external_FAM_file $tmpfile4 $mapfile
-#module unload python38/3.8.3
+module load python38/3.8.3
+python3 $python_script $gene_annotation_file $tmpfile3 $external_FAM_file $mid_ped_file $mapfile
+module unload python38/3.8.3
 
 #now that we have completed the recoding of the lof matrix file, we need to recode the ped file
 #in order to do that we will exchange every "0" for "0 0", every "1" for "0 1" and every "2" for "1 1"
 #awk 'BEGIN{FS=OFS=" "} {if(NR>1){for(i=7;i<=NF;i++){if($i==0) $i="0 0"; else if($i==1) $i="0 1"; else if($i==2) $i="1 1"}} print}' $tmpfile4 > $outfile
-awk 'BEGIN{FS=OFS=" "} {for(i=7;i<=NF;i++){if($i==0) $i="1 1"; else if($i==1) $i="1 2"; else if($i==2) $i="2 2"} print}' $tmpfile4 > $outfile
+awk 'BEGIN{FS=OFS=" "} {for(i=7;i<=NF;i++){if($i==0) $i="1 1"; else if($i==1) $i="1 2"; else if($i==2) $i="2 2"} print}' $mid_ped_file > $outfile
 
 #this command will delete the temporary files
 rm $tmpfile
