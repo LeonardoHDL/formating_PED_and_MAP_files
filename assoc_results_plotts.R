@@ -1,5 +1,3 @@
-
-
 args <- commandArgs(trailingOnly = TRUE)
 directory <- args[1]
 file_path <- paste(directory, ".assoc.logistic", sep = "")
@@ -9,6 +7,7 @@ data <- read.table(file_path, header = TRUE) # read the data from the file
 head(data)
 output_for_qq <- args[2]
 output_for_man <- args[3]
+output_for_top10 <- args[4]
 
 library(lattice)
 manhattan.plot<-function(chr, pos, pvalue, 
@@ -447,3 +446,11 @@ png(file=output_for_man,
     width=900, height=600)
 manhattan.plot(data$CHR, data$BP, data$P, sig.level=5e-8, col=c("orange","blue","purple", "green", "brown"))
 dev.off()
+
+#we will also output a list of the top 10 significant SNPs
+#in order to do that we will need to remove NAs from the data
+data<-na.omit(data)
+#now that we have removed the NAs we can sort the data by p-value
+data<-data[order(data$P),]
+#and now we will output the top 10 SNPs
+write.table(data[1:10,], file=output_for_top10, sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE)
