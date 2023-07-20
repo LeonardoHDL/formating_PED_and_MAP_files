@@ -16,7 +16,7 @@ done
 
 ped_file=${input_file}ped
 map_file=${input_file}map
-outfile=${outdirectory}Gene_burden_Analysis_M1.1
+outfile=${outdirectory}Gene_burden_Analysis_M4.5
 pheno_file='/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230227_PCA_results_and_extrafiles/pheno.txt'
 covars_file='/mnt/Guanina/cvan/data/Keloids_F2/Analysis/leo_analysis/20230508_burden_analysis/covarfile_array_0.005.txt'
 module load plink/1.9
@@ -29,9 +29,9 @@ module unload plink/1.9
 
 results_of_assoc_just_snps=${outfile}
 path_R_script='assoc_results_plotts.R'
-output_for_QQ=${outdirectory}M1.1_QQplot.png
-output_for_man=${outdirectory}M1.1_MAN_plot.png
-output_top_ten=${outdirectory}M1.1_top_ten_genes.txt
+output_for_QQ=${outdirectory}M4.5_QQplot.png
+output_for_man=${outdirectory}M4.5_MAN_plot.png
+output_top_ten=${outdirectory}M4.5_top_ten_genes.txt
 
 module load r/4.2.2
 Rscript --vanilla ${path_R_script} ${results_of_assoc_just_snps} ${output_for_QQ} ${output_for_man} ${output_top_ten}

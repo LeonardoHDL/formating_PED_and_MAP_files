@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 #this script performs the GWAS analysis using the gene burden test
+#it's to note that this script does a recoding from the ped file to a bedfile
 
 #it should be run as follows:
 
